@@ -55,6 +55,7 @@ void mainMenu(){
     		"\t                            	        \n");
     printf("\tPilihan anda? ");
     scanf("%c", &pilihMenu);
+    
 	
 	switch(pilihMenu){
       case '1': menu_1(); break;
@@ -156,7 +157,7 @@ void menu_2(){
 }
 
 void login(){ 
-  	char username[20], userpwd[3];
+  	char username[20], userpwd[3], pilih[3];
  	int i; 
  	system("CLS");
  	printf(	" \n  +----------------------------------+\n"
@@ -176,17 +177,31 @@ void login(){
 			printf("\n\n  Login Berhasil. Selamat datang admin!");
 			Sleep(1500);
 			menu_2();
-    	}else if(strcmp(userpwd, "123") == 0){ 
+    	}else{ 
 			printf("\n\n  Password yang dimasukkan salah.");
-			Sleep(1500);
-			system("CLS");
-			mainMenu();
+			printf ("\n  Apakah anda ingin kembali ke menu utama (yes/no)?");
+			scanf ("%s", &pilih);
+			if( strcmp( pilih, "yes") == 0 ){
+				system("CLS");
+				mainMenu();
+			}else if (strcmp( pilih, "no") == 0);{
+				system("CLS");
+				login();
+			}
     	}
-	}else if(strcmp(username, "admin") == 1){
+	}else {
     	printf("\n\n  User tidak ditemukan.");
-    	Sleep(1500);
-    	system("CLS");
-    	mainMenu();
+    	printf("\n  Password yang dimasukkan salah.");
+		printf ("\n  Apakah anda ingin kembali ke menu utama (yes/no)?");
+			scanf ("%s", &pilih);
+		if( strcmp( pilih, "yes") == 0 ){
+				system("CLS");
+				mainMenu();
+			}else if (strcmp( pilih, "no") == 0);{
+				system("CLS");
+				login();
+			}
+    
     }
 }
 
@@ -261,8 +276,8 @@ void cariBerita (){
 int searchNews (int size, news b1[], char *mstype, int type){
 	int i;
 	int found = 0;
-	char key[70];
-	char temp1[70], temp2[70];
+	char key[100];
+	char temp1[100], temp2[100];
 	
 	printf("\n  Enter %-8s -> ", mstype);
 	if(!strcmp(mstype, "Tanggal")){
