@@ -15,7 +15,7 @@ typedef struct news{
 void gudangBerita(){
     FILE *fp = NULL;
     news *b;
-    b = (news*)calloc(11, sizeof(news));
+    b = (news*)calloc(15, sizeof(news));
     fp = fopen("newsData.dat", "w");
 
     strcpy(b[0].nomor, "001");
@@ -63,7 +63,7 @@ void gudangBerita(){
     strcpy(b[6].nomor, "007");
     strcpy(b[6].judul, "Catat, Ini 4 Tips Persiapkan Tubuh Jalani Puasa Ramadhan");
     strcpy(b[6].topik, "Kesehatan");
-    strcpy(b[6].tanggal, "25/03/2002");
+    strcpy(b[6].tanggal, "25/03/2022");
     strcpy(b[6].penulis, "Hisnudita Hagiworo");
     strcpy(b[6].link, "https://health.kompas.com/read/2022/03/25/190219068/catat-ini-4-tips-persiapkan-tubuh-jalani-puasa-ramadhan");
 
@@ -88,15 +88,43 @@ void gudangBerita(){
     strcpy(b[9].penulis, "Suhaiela Bahfein");
     strcpy(b[9].link, "https://www.kompas.com/properti/read/2022/03/23/194500221/infrastruktur-jalan-dan-air-mulai-dibangun-di-ikn-nusantara");
     
-    strcpy(b[10].nomor, "011");
-    strcpy(b[10].judul, "Infrastruktur Maneketehe");
-    strcpy(b[10].topik, "Nasi Padang");
-    strcpy(b[10].tanggal, "33/03/2022");
-    strcpy(b[10].penulis, "Suhaili Ale");
-    strcpy(b[10].link, "https://www.kompas.com/properti/read/2022/03/23/194500221/infrastruktur-woilah");
+	strcpy(b[10].nomor, "011");
+    strcpy(b[10].judul, "Daftar Game Baru April 2022, Ada (Chrono Cross) Versi Remaster");
+    strcpy(b[10].topik, "Tekno");
+    strcpy(b[10].tanggal, "05/04/2022");
+    strcpy(b[10].penulis, "Kevin Rizky Pratama");
+    strcpy(b[10].link, "https://tekno.kompas.com/read/2022/04/05/13010067/daftar-game-baru-april-2022-ada-chrono-cross-versi-remaster");
+    
+    strcpy(b[11].nomor, "012");
+    strcpy(b[11].judul, "Kanye West Mundur dari Festival Coachella 2022");
+    strcpy(b[11].topik, "Hype");
+    strcpy(b[11].tanggal, "05/04/2022");
+    strcpy(b[11].penulis, "Vincentius Mario");
+    strcpy(b[11].link, "https://www.kompas.com/hype/read/2022/04/05/124659166/kanye-west-mundur-dari-festival-coachella-2022");
+    
+    strcpy(b[12].nomor, "013");
+    strcpy(b[12].judul, "Jadwal Uji Coba Timnas U19 Indonesia pada Bulan Ramadhan");
+    strcpy(b[12].topik, "Bola");
+    strcpy(b[12].tanggal, "03/04/2022");
+    strcpy(b[12].penulis, "Celvin Moniaga S.");
+    strcpy(b[12].link, "https://bola.kompas.com/read/2022/04/03/21384578/jadwal-uji-coba-timnas-u19-indonesia-pada-bulan-ramadhan");
+    
+    strcpy(b[13].nomor, "014");
+    strcpy(b[13].judul, "Perjalanan Kasus Pemerkosaan 13 Santri oleh Herry Wirawan, Kronologi hingga Vonis Mati");
+    strcpy(b[13].topik, "Regional");
+    strcpy(b[13].tanggal, "04/04/2022");
+    strcpy(b[13].penulis, "Candra Setia Budi");
+    strcpy(b[13].link, "https://bandung.kompas.com/read/2022/04/04/225025378/perjalanan-kasus-pemerkosaan-13-santri-oleh-herry-wirawan-kronologi-hingga");
+    
+    strcpy(b[14].nomor, "015");
+    strcpy(b[14].judul, "Begini Suasana Tarawih Ramadhan di Times Square dan Berbagai Negara");
+    strcpy(b[14].topik, "Tren");
+    strcpy(b[14].tanggal, "04/04/2022");
+    strcpy(b[14].penulis, "Alinda Hardiantoro");
+    strcpy(b[14].link, "https://www.kompas.com/tren/read/2022/04/04/203000765/begini-suasana-tarawih-ramadhan-di-times-square-dan-berbagai-negara");
 
     int i;
-    for (i = 0; i < 11; i++){
+    for (i = 0; i < 15; i++){
         fwrite(&b[i], sizeof(news), 1, fp);
     }
     if(fwrite != 0){

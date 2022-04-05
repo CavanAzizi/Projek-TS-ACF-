@@ -158,7 +158,7 @@ void menu_2(){
 
 void login(){ 
   	char username[20], userpwd[3], pilih[3];
- 	int i; 
+ 	int i, salah; 
  	system("CLS");
  	printf(	" \n  +----------------------------------+\n"
  			"  |         E-NEWS MANAGEMENT        |\n"
@@ -179,28 +179,37 @@ void login(){
 			menu_2();
     	}else{ 
 			printf("\n\n  Password yang dimasukkan salah.");
+			do{
 			printf ("\n  Apakah anda ingin kembali ke menu utama (yes/no)?");
 			scanf ("%s", &pilih);
 			if( strcmp( pilih, "yes") == 0 ){
 				system("CLS");
 				mainMenu();
-			}else if (strcmp( pilih, "no") == 0);{
+			}else if (strcmp( pilih, "no") == 0){
 				system("CLS");
 				login();
+			}else {
+				printf("\n  Input yang ada masukkan tidak ada");
+				salah = 1;
 			}
+			}while(salah == 1);
     	}
 	}else {
     	printf("\n\n  User tidak ditemukan.");
-    	printf("\n  Password yang dimasukkan salah.");
-		printf ("\n  Apakah anda ingin kembali ke menu utama (yes/no)?");
+			do{
+			printf ("\n  Apakah anda ingin kembali ke menu utama (yes/no)?");
 			scanf ("%s", &pilih);
-		if( strcmp( pilih, "yes") == 0 ){
+			if( strcmp( pilih, "yes") == 0 ){
 				system("CLS");
 				mainMenu();
-			}else if (strcmp( pilih, "no") == 0);{
+			}else if (strcmp( pilih, "no") == 0){
 				system("CLS");
 				login();
+			}else {
+				printf("\n  Input yang ada masukkan tidak ada");
+				salah = 1;
 			}
+			}while(salah == 1);
     
     }
 }
