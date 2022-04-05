@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "function.h"
+#include "function.c"
 
 int main(){
     opening();
