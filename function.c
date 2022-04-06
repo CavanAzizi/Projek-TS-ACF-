@@ -6,6 +6,7 @@
 #include <windows.h>
 #include "Database.h"
 
+//function prototype
 void opening();
 void mainMenu();
 void menu_1();
@@ -16,12 +17,24 @@ int searchNews (int size, news b[], char *mstype, int type);
 void cariBerita ();
 void halamanSelanjutnya();
 void pilihBerita(int index);
+void linkWeb(int index);
 void sortNews();
 void sortforUser(int size, news b[], int urut);
 void swap(int j, news b[]);
 void readNews(int size, news b[]);
+void menuTambahBerita();
+void addNews(char *arr, char *cmp);
+int cekDataBerita(char *arr);
 int getSize();
 void low (char str[], char temp[]);
+void editNews();
+void sortNewsData();
+void tableNews ();
+int searchindexNo (char *arr);
+int cekSama (char *arr);
+void deleteNews();
+void restoreNews();
+void panduan ();
 
 void opening(){
     printf("\n\n 	-==========================================================================================-\n"
@@ -31,7 +44,8 @@ void opening(){
 		   " 	|                                                                                          |\n"
 		   " 	| MENU 1 Halaman Berita                                                                    |\n"
     	   " 	| MENU 2 Login Admin                                                                       |\n"
-		   " 	| MENU 3 Exit                                                                              |\n"
+		   " 	| MENU 3 Panduan                                                                           |\n"
+		   " 	| MENU 4 EXIT                                                                              |\n"
 		   " 	|                                                                                          |\n"
 		   " 	-==========================================================================================-\n\n  ");
   	printf("	Press any key to continue . . . "); 
@@ -51,7 +65,8 @@ void mainMenu(){
 			"\t+---------------------------------+\n\n"
     		"\t  MENU 1 Halaman Berita              \n"
     		"\t  MENU 2 Login Admin        	        \n"
-    		"\t  MENU 3 Exit                        \n"
+    		"\t  MENU 3 Panduan                     \n" 
+			"\t  MENU 4 EXIT                        \n"
     		"\t                            	        \n");
     printf("\tPilihan anda? ");
     scanf("%c", &pilihMenu);
@@ -65,6 +80,7 @@ void mainMenu(){
         printf("\n\n Terima kasih, semoga harimu menyenangkan! ^_^");
         Sleep(200);
         exit(0);
+	  case '4' : panduan(); break;
     	default :
     		stopMenu = 1;
     		break;
@@ -73,10 +89,12 @@ void mainMenu(){
 }
 
 void menu_1(){
-	int page = 0, pilih = 0;
-	system("CLS");
-    printBerita(page);
+	int page = 0, error;
+	int pilih = 0;
+
     do {
+		system("CLS");
+    	printBerita(page);
         printf("\n  1. Halaman Selanjutnya");
         printf("\n  2. Halaman Sebelumnya");
         printf("\n  3. Pencarian Berita");
@@ -104,6 +122,7 @@ void menu_1(){
 				sortNews();
 				break;
             case 5: break;
+					
         }
   	}while(pilih != 5);
         
@@ -131,23 +150,22 @@ void menu_2(){
 			
 		switch(pilih){
 			case 1 : {
-				
+				menuTambahBerita();
 				break;
 			}
 			case 2 : {
-				
+				editNews();
 				break;
 			}
 			case 3 : {
-				
+				deleteNews();
 				break;
 			}
 			case 4 : {
-				
+				restoreNews();
 				break;
 			}
-			case 5 :
-				break;
+			case 5 : break;
 		}	
 		if (pilih > 5 && pilih < 0){
 			printf("\n  Invalid Menu! Ulang Kembali ");
@@ -175,12 +193,11 @@ void login(){
   	if(strcmp(username, "admin") == 0){ 
     	if(strcmp(userpwd, "123") == 0){ 
 			printf("\n\n  Login Berhasil. Selamat datang admin!");
-			Sleep(1500);
 			menu_2();
     	}else{ 
 			printf("\n\n  Password yang dimasukkan salah.");
 			do{
-			printf ("\n  Apakah anda ingin kembali ke menu utama (yes/no)?");
+			printf ("\n  Apakah anda ingin kembali ke menu utama (yes/no)? ");
 			scanf ("%s", &pilih);
 			if( strcmp( pilih, "yes") == 0 ){
 				system("CLS");
@@ -220,7 +237,7 @@ void printBerita(int page){
   	if(end > size){
   		end = size;
 	}
-  	gudangBerita();
+
   	news b[size];
   	readNews(size, b);
   	printf("\n %*s%s%*s\n\n", 60, " ", "E - N E W S   M A N A G E M E N T", 60, " ");
@@ -285,8 +302,8 @@ void cariBerita (){
 int searchNews (int size, news b1[], char *mstype, int type){
 	int i;
 	int found = 0;
-	char key[100];
-	char temp1[100], temp2[100];
+	char key[300];
+	char temp1[300], temp2[300];
 	
 	printf("\n  Enter %-8s -> ", mstype);
 	if(!strcmp(mstype, "Tanggal")){
@@ -306,6 +323,7 @@ int searchNews (int size, news b1[], char *mstype, int type){
 				if (strstr(temp1, temp2) != NULL){
 					found = 1;
 					pilihBerita(i);
+					linkWeb(i);
 					printf("\n");
 				}
 			} break;
@@ -317,6 +335,7 @@ int searchNews (int size, news b1[], char *mstype, int type){
 				if (strstr(temp1, temp2) != NULL){
 					found = 1;
 					pilihBerita(i);
+					linkWeb(i);
 					printf("\n");
 				}
 			} break;
@@ -328,6 +347,7 @@ int searchNews (int size, news b1[], char *mstype, int type){
 				if (strstr(temp1, temp2) != NULL){
 					found = 1;
 					pilihBerita(i);
+					linkWeb(i);
 					printf("\n");
 				} 
 			} break;
@@ -337,6 +357,7 @@ int searchNews (int size, news b1[], char *mstype, int type){
 				if (strstr(b1[i].penulis, key) != NULL){
 					found = 1;
 					pilihBerita(i);
+					linkWeb(i);
 					printf("\n");
 				} 
 			} break;
@@ -350,8 +371,7 @@ void pilihBerita(int index){
 	FILE *fp = fopen ("newsData.dat", "r");
 	int size = getSize();
 	news b[size]; 
-	int i, counter;
-	char pilih[3];
+	int i;
 	fseek(fp, 0, SEEK_SET);
 	for(i = 0; i < size; i++){
 		fread(&b[i], sizeof(news), 1, fp);
@@ -363,6 +383,15 @@ void pilihBerita(int index){
 	printf("  Tanggal  : %s\n", b[index].tanggal);
 	printf("  Penulis  : %s\n", b[index].penulis);
 	printf("  Link     : %s\n", b[index].link);
+	
+	
+	fclose(fp);
+}
+
+void linkWeb(int index){
+	int counter;
+	char pilih [3];
+
 	do{
 		printf ("\n  Apakah anda ingin membukanya di website (yes/no) : ");
 		scanf("%s", &pilih);
@@ -399,18 +428,32 @@ void pilihBerita(int index){
 				case 9:
 					system("start https://www.kompas.com/properti/read/2022/03/23/194500221/infrastruktur-jalan-dan-air-mulai-dibangun-di-ikn-nusantara");
 					break;
+				case 10: 
+					system("start https://tekno.kompas.com/read/2022/04/05/13010067/daftar-game-baru-april-2022-ada-chrono-cross-versi-remaster");
+					break;
+				case 11:
+					system("start https://www.kompas.com/hype/read/2022/04/05/124659166/kanye-west-mundur-dari-festival-coachella-2022");
+					break;
+				case 12:
+					system("start https://bola.kompas.com/read/2022/04/03/21384578/jadwal-uji-coba-timnas-u19-indonesia-pada-bulan-ramadhan");
+					break;
+				case 13:
+					system("start https://bandung.kompas.com/read/2022/04/04/225025378/perjalanan-kasus-pemerkosaan-13-santri-oleh-herry-wirawan-kronologi-hingga");
+					break;
+				case 14:
+					system("start https://www.kompas.com/tren/read/2022/04/04/203000765/begini-suasana-tarawih-ramadhan-di-times-square-dan-berbagai-negara");
+					break;
 			}
 				break;
 		}else if ( strcmp( pilih, "no") == 0){
 				counter = 2;	
-				printf ("  Baik, Terima Kasih ");
+				printf ("  Baik, Terima Kasih \n");
 				break;
 		}else
-	 			printf("  error!!!\n");
+	 			printf("  Error!!!\n"); 
 	}while ((counter != 1) || (counter != 2));
-	
-	fclose(fp);
 }
+
 
 void sortNews(){
 	int i, urut;
@@ -559,4 +602,399 @@ int getSize(){
 	int size = ftell(fp)/sizeof(news);
 	fclose(fp);
 	return size;
+}
+
+void menuTambahBerita(){
+	int i, index;
+	FILE *fp;
+	fp = fopen ("newsData.dat", "a"); //dipakai append
+	index = getSize();
+	char pilih;
+	news b;//ditambahkan 1 per satu makanya bukan menggunakan array
+	
+	do {
+		system("cls");
+		printf(	" \n  +----------------------------------+\n"
+				"  |         E-NEWS MANAGEMENT        |\n"
+				"  |      >> MENU TAMBAH BERITA <<    |\n"
+				"  +----------------------------------+\n\n");
+		printf("\n  Add new news? [yes/no] ");
+		scanf(" %[^\n]c", &pilih);
+		if(pilih == 'y'){
+			printf("\n  Data Berita Ke-%d", index+1);
+			printf("\n  -----------------------------------\n");	
+			addNews(b.nomor, (char *) "Nomor");
+			addNews(b.judul, (char *) "Judul");
+			addNews(b.topik, (char *) "Topik");
+			addNews(b.tanggal, (char *) "Tanggal");
+			addNews(b.penulis, (char *) "Penulis");
+			addNews(b.link, (char *) "Link");
+			
+			int cek = fwrite(&b, sizeof(news), 1, fp);
+			
+			if (cek != 0)
+				printf("\n  Add news success!\n  ");
+				system("pause");
+				index++;
+			} else printf("\n  Add news failed!\n  ");
+			
+	} while (pilih != 'n');
+	
+	fclose(fp);
+}
+
+void addNews(char *arr, char *cmp){
+	int cek;
+	char temp[100];
+	
+	do {
+		printf("  %-8s : ", cmp);		
+		scanf(" %100[^\n]s", &temp);
+		cek = cekDataBerita(temp);
+	} while (cek == 0);
+	strcpy(arr, temp);
+}
+
+int cekDataBerita(char *arr){
+//pengecekan apakah ada data buku yang sama	
+	int cek = 1;
+	int i;
+	int size = getSize(); //mengambil jumlah data buku
+	
+	news b[size]; //array buku
+	readNews(size, b); //membaca data buku dari file
+	
+	for(i = 0; i < size; i++){ //cek data buku yang sama
+		if (stricmp(arr, b[i].nomor) == 0) { //
+			cek = 0;
+			break;	
+		}
+		if (stricmp(arr, b[i].judul) == 0) { //cek judul
+			cek = 0;
+			break;	
+		}else cek = 1;	
+	}
+	
+	if (cek == 1) return 1; //jika tidak ada yang sama
+	if (cek == 0) {
+		printf("  Already Exist!\n"); 
+		return 0; //jika ada yang sama
+	}
+}
+
+void sortNewsData(){
+	FILE *fp;
+	int i,j;
+	int size = getSize (); //mencari banyaknya buku dalam data
+	news b[size];
+	readNews(size, b); //membuat b1 dapat mengakses data
+//dilakukan sortir berdasarkan ID book	
+	for (i = 0; i < size - 1; i++){
+		for (j = 0; j < size-1-i; j++){
+			if(strcmp(b[j].nomor, b[j+1].nomor) > 0) {
+				swap(j, b);
+	    	}			
+		}
+	}
+//selanjutnya data yang sudah terurut dimasukkan dalam data	
+	fp = fopen("bookNews.dat", "r+");
+	for (i = 0; i < size; i++){
+		fwrite(&b[i],sizeof(news), 1, fp);
+	}
+	fclose(fp);
+}
+
+void editNews(){	
+	FILE *fp;
+	int size = getSize ();
+	int index = 0; 
+	int i;
+	int cek;
+	char temp[100];
+	
+	fseek(fp, 1, SEEK_END);
+	news b[size]; 
+	readNews(size, b);
+	
+	char nomor[5]; 
+	int cmp = -1; //cmp dipilih tdk 0
+	do {
+		system("cls");
+		tableNews();
+		printf("\n  Enter the book's ID to be edited [Ex : 001] [0. back] : ");
+		scanf(" %3[^\n]s", &nomor);
+		if (strcmp(nomor, "0") == 0) index = -2; //untuk back
+		else index = searchindexNo(nomor);
+		
+		while (index != -1 && index != -2){ //-1 bila id tidak ditemukan
+			system("cls");
+			printf(" -===============================================================-\n"
+			   " |                          EDIT NEWS PROFILE                        |\n"
+			   " |-------------------------------------------------------------------|\n"
+			   " |            Choose what component that you want to edit!           |\n"
+			   " |-------------------------------------------------------------------|\n"
+			   " | 1. NO | 2. Judul | 3. Topik | 4. Tanggal | 5. Penulis | 6. Link   |\n"
+			   " ---------------------------------------------------------------------\n\n");
+			pilihBerita (index);
+			printf("\n  0. back\n");
+			
+			do {
+				printf("\n  => : ");
+				scanf("%d", &cmp);
+			} while (cmp > 6 && cmp < 0);
+			
+			if (cmp == 0) break;
+			else {
+				fp = fopen ("bookData.dat", "r+");
+				do {
+					printf("\n  Change : ");
+					scanf(" %100[^\n]s", &temp);
+					cek = cekSama(temp);
+					if (cek == 1){
+						switch (cmp){
+							case 1 : strcpy(b[index].nomor, temp); break;
+							case 2 : strcpy(b[index].judul, temp); break;
+							case 3 : strcpy(b[index].topik, temp); break;
+							case 4 : strcpy(b[index].tanggal, temp); break;
+							case 5 : strcpy(b[index].penulis, temp); break;
+							case 6 : strcpy(b[index].link, temp); break;
+						}	
+					}		
+				} while (cek == 0);
+				
+				for (i = 0; i < size; i++){
+					fwrite(&b[i],sizeof(news), 1, fp);
+				}	
+
+				if(fwrite != 0) printf("\n  Data has been succesfully updated!\n  ");
+    			else printf("\n  Error writing file !\n");	
+			}
+			fclose(fp);
+		}
+	} while (index != -2);
+}
+
+void tableNews (){
+	sortNewsData();
+	FILE *fp;
+	fp = fopen("bookData.dat", "r");
+	news bTB;
+		
+	printf("\n %*s%s%*s\n\n", 60, " ", "E - N E W S   M A N A G E M E N T", 60, " ");
+  	printf(" ========================================================================================");
+	printf("============================================================================= \n");
+  	printf(" | %-10s  %-88s  %-14s  %-16s  %-20s%7s\n","No. ", "Judul", "Topik", "Tanggal", "Penulis", "|");
+  	printf(" ========================================================================================");
+	printf("============================================================================= \n");
+  	while (fread (&bTB, sizeof(news), 1, fp )){
+		printf(" | %.45s  %-90s	%-15s	%-15s	%-20s%10s\n", bTB.nomor, bTB.judul, bTB.topik, bTB.tanggal, bTB.penulis, "|");
+  	}
+ 	printf(" ========================================================================================");
+	printf("============================================================================= \n");
+	
+	fclose(fp); 
+}
+
+int searchindexNo (char *arr){
+	FILE *fp = fopen ("bookData.dat", "r");
+	news b;
+	int cek = 0;
+	int i = 0;
+	
+	while(fread(&b, sizeof(news), 1, fp )){
+		if(strcmp(arr, b.nomor) == 0) {
+			cek = 1;
+			break;
+		}
+		else i++;
+	}
+	
+	if (cek == 1) {
+		fclose(fp);	
+		return i;	
+	}else {
+		printf("\n  News ID not Found\n  ");
+		system("pause");
+		return -1;
+		fclose(fp);		
+	}
+}
+
+int cekSama (char *arr){
+	int cek = 1;
+	int i;
+	int size = getSize();
+	
+	news b[size]; 
+	readNews(size, b);
+	
+	for(i = 0; i < size; i++){
+		if (stricmp(arr, b[i].nomor) == 0) {
+			cek = 0;
+			break;	
+		}
+		if (stricmp(arr, b[i].judul) == 0) {
+			cek = 0;
+			break;	
+		}else cek = 1;	
+	}
+	
+	if (cek == 1) return 1;
+	if (cek == 0) {
+		printf("  Already Exist!\n"); 
+		return 0;
+	}
+}
+
+void deleteNews(){
+	news b;
+	FILE *fp, *fp_temp;	
+	int index = 0; 
+	int i, found = 0;
+	char yesno;
+	
+	char nomor[5]; 
+	int cmp = -1; //cmp dipilih tdk 0
+	do {
+		system("cls");
+		tableNews ();
+		printf("\n  Enter the book's ID to be deleted[Ex : 001] [0. back] : ");
+		scanf(" %3[^\n]s", &nomor);
+		if (strcmp(nomor, "0") == 0) index = -2; //untuk back
+		else index = searchindexNo(nomor);
+		
+		while (index != -1 && index != -2){ //-1 bila id tidak ditemukan
+			system("cls");
+			printf(" -===============================================================-\n"
+			   " |                          DELETED BOOK PROFILE                        |\n"
+			   " ---------------------------------------------------------------------\n\n");
+			pilihBerita (index);
+		
+			do {
+				printf("\n  Are you sure want to delete that book? [y/n] ");
+				scanf(" %[^\n]c", &yesno);
+				if (yesno == 'y') {
+					fp = fopen("bookData.dat", "r");
+					fp_temp = fopen("temp_bookData.dat", "w");
+					while(fread(&b,sizeof(news),1,fp)){
+						if (strcmp(b.nomor, nomor) == 0)
+							found = 1;
+						else
+							fwrite(&b, sizeof(nomor), 1, fp_temp);
+					}
+					fclose(fp);
+					fclose(fp_temp);
+					
+					if(found){
+						fp_temp = fopen("temp_bookData.dat", "r");
+						fp = fopen("bookData.dat", "w");
+						
+						while(fread(&b, sizeof(news), 1,fp_temp)){
+							fwrite(&b, sizeof(news),1,fp);
+						}
+						
+						fclose(fp);
+						fclose(fp_temp);
+						
+						printf("\n  Book has been deleted successfuly!");
+					}
+					
+					printf("\n\n  ");
+					system("pause");
+				}
+			} while (yesno != 'y' && yesno != 'n');
+			
+			index = -1;
+		}
+	} while (index != -2);
+}
+
+void restoreNews(){
+	char inputKey[8];
+	char restoreKey[] = "12032022"; int cekKey = 0;
+	char yesno;
+	
+	system("cls");
+	printf(" -===================================================-\n"
+		   " |                   RESTORE DATA                    |\n"
+		   " |---------------------------------------------------|\n"
+	  	   " |    In this section, your data will be restored    |\n"
+	   	   " |  to default, so please make sure before doing it. |\n"
+	   	   " -===================================================-\n");
+	while (cekKey == 0){
+		printf("\n  Enter the restore key : ");
+		scanf(" %8[^\n]s", &inputKey);
+		
+		if (strcmp(restoreKey, inputKey) == 0) cekKey = 1;
+		else {
+			printf("  Invalid!\n");
+			Sleep(750);
+			break;
+		}
+	}
+	
+	if (cekKey == 1){
+		do {
+			printf("  Do you want to restore? [y/n] ");
+			scanf(" %[^\n]c", &yesno);
+			if (yesno == 'y') {
+				gudangBerita();
+				printf("\n\n  ");
+				system("pause");
+			}
+		} while (yesno != 'y' && yesno != 'n');
+	}
+}
+
+void panduan(){
+	#define NUMBER_OF_STRING 35
+	#define MAX_STRING_SIZE 300
+	int i;
+	char arr [NUMBER_OF_STRING][MAX_STRING_SIZE] = 
+	{"  >> Menu Utama <<",
+	 "  1. Pilihlah menu yang diinginkan sesuai nomor ",
+	 "    - Menu 1 adalah halaman kumpulan berita ",
+	 "    - Menu 2 adalah halaman login untuk admin ",
+	 "    - Menu 3 adalah halaman panduan program",
+	 "    - Menu 4 program akan keluar ",
+	 " ",
+	 "  >> Menu 1 <<",
+	 "  1. Pilihlah menu yang diinginkan sesuai nomor ",
+	 "  2. Program akan menampilkan kumpulan berita ",
+	 "  3. Terdapat fungsi untuk berpindah halaman, mencari berita, dan mengurutkan berita ",
+	 "  4. Pilihlah fungsi yang diinginkan sesuai nomor ",
+	 "	  - Pilihan 1 untuk berpindah halaman selanjutnya ",
+	 "	  - Pilihan 2 untuk berpindah halaman sebelumnya ",
+	 "	  - Pilihan 3 untuk mencari berita berdasarkan judul, topik, tanggal, dan penulis. Lalu dapat menuju link yang dituju ",
+	 "	  - Pilihan 4 untuk mengurutkan (Angka-Kapital-Huruf Kecil) berita berdasarkan judul, topik, tanggal, dan penulis ",
+	 "	  - Pilihan 5 untuk kembali pada menu utama ",
+	 " ",
+	 "  >> Menu 2 <<",
+	 "  1. Program akan meminta untuk memasukkan username dan password ",
+	 "  2. Jika sesuai maka akan berpindah pada halaman editorial ",
+	 "  3. Terdapat 5 pilihan fungsi. Pilihlah fungsi yang diinginkan sesuai nomor ",
+	 "	  - Pilihan 1 berfungsi untuk menambah berita ",
+	 "	  - Pilihan 2 berfungsi untuk mengedit berita ",
+	 "	  - Pilihan 3 berfungsi untuk menghapus berita ",
+	 "	  - Pilihan 4 berfungsi untuk mengembalikan berita yang ada ke default ",
+	 "	  - Pilihan 5 untuk kembali pada menu utama ",
+	 " ",
+	 "  >> Menu 3 <<",
+	 "  Program akan menampilkan panduan program E-News Management",
+	 " ",
+	 "  >> Menu 4 <<",
+	 "  Program akan keluar. ",
+	};
+
+	printf(	" \n  +----------------------------------+\n"
+				"  |         E-NEWS MANAGEMENT        |\n"
+				"  |         >> MENU PANDUAN <<       |\n"
+				"  +----------------------------------+\n\n");
+
+	for ( i = 0; i < NUMBER_OF_STRING; i++){
+    	printf("%s\n", arr[i]);
+	}
+  				
+	printf("	Press any key to continue . . . "); 
+  	getch(); 
 }

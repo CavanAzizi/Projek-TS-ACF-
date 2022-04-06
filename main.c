@@ -7,34 +7,38 @@ int main(){
 	
 	//fungsi opening
     opening();
-	
+
 	do {
-	system("CLS");
-    printf(	"\n\n\t+---------------------------------+\n"
-    		"\t|         E-NEWS MANAGEMENT       |\n"
-    		"\t|          >> MAIN MENU <<        |\n"
-			"\t+---------------------------------+\n\n"
-    		"\t  MENU 1 Halaman Berita              \n"
-    		"\t  MENU 2 Login Admin        	        \n"
-    		"\t  MENU 3 Exit                        \n"
-    		"\t                            	        \n");
-    printf("\tPilihan anda? ");
-    scanf("%c", &pilihMenu);
+		system("CLS");
+    	printf(	"\n\n\t+---------------------------------+\n"
+    			"\t|         E-NEWS MANAGEMENT       |\n"
+    			"\t|          >> MAIN MENU <<        |\n"
+				"\t+---------------------------------+\n\n"
+    			"\t  MENU 1 Halaman Berita              \n"
+    			"\t  MENU 2 Login Admin        	        \n"
+    			"\t  MENU 3 Exit                        \n" 
+				"\t  MENU 4 Panduan                     \n"
+    			"\t                            	        \n");
+  		printf("\tPilihan anda? ");
+    	scanf("%c", &pilihMenu);
     
 	
-	switch(pilihMenu){
-      case '1': menu_1(); break;
-      case '2': login(); break;
-      case '3':
-	  	system("CLS");
-        printf("\n\n Terima kasih, semoga harimu menyenangkan! ^_^");
-        Sleep(200);
-        exit(0);
-    	default :
-    		stopMenu = 1;
-    		break;
-    }
+		switch(pilihMenu){
+      		case '1': menu_1(); break;
+      		case '2': login(); break;
+      		case '3':
+	  			system("CLS");
+        		printf("\n\n Terima kasih, semoga harimu menyenangkan! ^_^");
+        		Sleep(200);
+        		exit(0);
+	  		case '4' : 
+			  	system("CLS");
+			  	panduan(); 
+    		default :
+    			stopMenu = 1;
+    			break;
+   		 }
   	}while(stopMenu = 1);  
-  	
-    return 0;
-}
+
+	return 0;
+	}
